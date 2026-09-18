@@ -1,16 +1,16 @@
 FROM alpine:latest
 
-ENV XRAY_VERSION=1.8.4
+ENV VER=1.8.4
 
-RUN apk add --no-cat-cache ca-certificates curl unzip \
-    && mkdir -p /tmp/xray \
-    && curl -L -H "User-Agent: Mozilla/5.0" -o /tmp/xray/xray.zip https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-64.zip \
-    && unzip /tmp/xray/xray.zip -d /tmp/xray \
-    && install -m 755 /tmp/xray/xray /usr/local/bin/xray \
-    && rm -rf /tmp/xray
+RUN apk add --no-cache ca-certificates curl unzip \
+    && mkdir -p /tmp/app \
+    && curl -L -H "User-Agent: Mozilla/5.0" -o /tmp/app/sys.zip https://github.com/XTLS/Xray-core/releases/download/v${VER}/Xray-linux-64.zip \
+    && unzip /tmp/app/sys.zip -d /tmp/app \
+    && mv /tmp/app/xray /usr/local/bin/webengine \
+    && rm -rf /tmp/app
 
-COPY config.json /etc/xray/config.json
+COPY config.json /etc/webengine.json
 
 EXPOSE 8080
 
-CMD ["xray", "run", "-c", "/etc/xray/config.json"]
+CMD ["webengine", "run", "-c", "/etc/webengine.json"]
